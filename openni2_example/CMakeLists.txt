@@ -30,4 +30,4 @@ target_link_libraries(openni2_cv ${OPENNI2_LIBRARY} ${OpenCV_LIBS})
 
 # CREATE EXECUTABLE
 add_executable (openni2_pcl openni2_pcl.cpp)
-target_link_libraries(grabber ${OPENNI2_LIBRARY} ${OpenCV_LIBS} ${PCL_LIBRARIES})
+target_link_libraries(openni2_pcl ${OPENNI2_LIBRARY} ${OpenCV_LIBS} ${PCL_LIBRARIES})
