@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     // define image pointers
     IplImage *img = NULL;
 
-    // initialize the eye camera
+    // initialize the camera
     CvCapture* capture = initializeCamera(cameraIndex);
     if(!capture)
     {
