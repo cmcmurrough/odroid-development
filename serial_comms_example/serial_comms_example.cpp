@@ -58,24 +58,24 @@ int openSerialPort(char* portName)
     }
     else
     {
-        // clear any existing file descriptor flags
-        fcntl(fd, F_SETFL, 0);
-
         // create a structure to store the port settings
         struct termios port_settings;
+
+        // get the current port settings
+        tcgetattr(fd, &port_settings);
 
         // set the baud rates
         cfsetispeed(&port_settings, B9600);
         cfsetospeed(&port_settings, B9600);
 
-        // set parity, stop bits, and data bits
+        // set 8 bits, no parity, no stop bits
         port_settings.c_cflag &= ~PARENB;
         port_settings.c_cflag &= ~CSTOPB;
         port_settings.c_cflag &= ~CSIZE;
         port_settings.c_cflag |= CS8;
 
-        // set the port to use all 8 bits
-        port_settings.c_iflag &= ~ISTRIP;
+        // set raw input mode
+        port_settings.c_lflag |= ~ICANON;
 
         // apply the settings to the port
         tcsetattr(fd, TCSANOW, &port_settings);
@@ -140,6 +140,14 @@ void sendPacket(int serialPort, unsigned char b1, unsigned char b2, unsigned cha
     // create the packet
     makeTeensyPacket(packet, b1, b2, b3);
 
+    printf("SENDING BYTES: ");
+    for(int i = 0; i < SERIAL_PACKET_LENGTH; i++)
+    {
+        char ch = packet[i];
+        printf("0x%X ", ch & 0xff);
+    }
+    printf("\n");
+
     // write the packet
     writeSerialBytes(serialPort, packet, SERIAL_PACKET_LENGTH);
 }
@@ -164,9 +172,9 @@ int pollSerialPort(int serialPort)
         for(int i = 0; i < n; i++)
         {
             char ch = buff[i];
-            printf("%x ", ch & 0xff);
+            printf("0x%X ", ch & 0xff);
         }
-        printf("/n");
+        printf("\n");
     }
 
     // return the number of bytes processed
@@ -200,6 +208,7 @@ int main(int argc, char **argv)
         printf("unable to open serial port %s \n", portName);
         return(0);
     }
+    printf("%s opened successfully!\n", portName);
 
     // continuously check for received serial data
     int numBytes = 0;
