@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     }
 
     // acquire frames until program termination
-    std::cout << "Press 'q' to halt acquisition..." << std::endl;
+    std::cout << "Press 'p' to render point cloud, 'q' to halt acquisition..." << std::endl;
     Mat depthImage, colorImage;
     Mat depthImageDraw;
     while(isRunning)
