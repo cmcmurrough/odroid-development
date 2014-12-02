@@ -12,7 +12,7 @@ find_library(OPENNI2_LIBRARY
 find_path(OPENNI2_INCLUDE_DIR OpenNI.h
 	PATHS "~/OpenNI-Linux-Arm-2.2/Include"
 )
-#link_directories(${OPENNI2_LIBRARY})
+link_directories(${OPENNI2_LIBRARY})
 include_directories(${OPENNI2_INCLUDE_DIR})
 
 # CONFIGURE PCL
