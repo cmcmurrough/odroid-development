@@ -7,10 +7,10 @@ find_package (OpenCV REQUIRED)
 # CONFIGURE OPENNI2
 find_library(OPENNI2_LIBRARY
 	NAMES OpenNI2
-	PATHS "~/OpenNI-Linux-Arm-2.2/Redist" "~/OpenNI-Linux-x64-2.2/Redist"
+	PATHS "~/OpenNI-Linux-Arm-2.2/Redist"
 )
 find_path(OPENNI2_INCLUDE_DIR OpenNI.h
-	PATHS "~/OpenNI-Linux-Arm-2.2/Include" "~/OpenNI-Linux-x64-2.2/Include"
+	PATHS "~/OpenNI-Linux-Arm-2.2/Include"
 )
 #link_directories(${OPENNI2_LIBRARY})
 include_directories(${OPENNI2_INCLUDE_DIR})
