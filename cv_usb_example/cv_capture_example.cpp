@@ -98,7 +98,8 @@ int main(int argc, char **argv)
 
         // attempt to acquire an image frame
         cv::Mat captureFrame;
-        if(capture.read(captureFrame))
+        bool captureSuccess = capture.read(captureFrame);
+        if(captureSuccess)
         {
             // process the image frame
             processFrame(captureFrame);
@@ -112,7 +113,7 @@ int main(int argc, char **argv)
         }
 
         // update the GUI window if necessary
-        if(showFrames)
+        if(showFrames && captureSuccess)
         {
             cv::imshow(DISPLAY_WINDOW_NAME, captureFrame);
 
