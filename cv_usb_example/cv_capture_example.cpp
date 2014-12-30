@@ -38,8 +38,8 @@
  **********************************************************************************************************************/
 bool processFrame(const cv::Mat &imageIn)
 {
-	// process the image frame
-	return true;
+    // process the image frame
+    return true;
 }
 
 /***********************************************************************************************************************
@@ -59,45 +59,45 @@ int main(int argc, char **argv)
     if(argc != NUM_COMNMAND_LINE_ARGUMENTS + 1)
     {
         std::printf("USAGE: %s <camera_index> <display_mode> \n", argv[0]);
-		std::printf("WARNING: Proceeding with default execution parameters... \n");
-		cameraIndex = 0;
-		showFrames = true;
+        std::printf("WARNING: Proceeding with default execution parameters... \n");
+        cameraIndex = 0;
+        showFrames = true;
     }
-	else
-	{
-		cameraIndex = atoi(argv[1]);
-		showFrames = atoi(argv[2]) > 0;
-	}
+    else
+    {
+        cameraIndex = atoi(argv[1]);
+        showFrames = atoi(argv[2]) > 0;
+    }
 
     // initialize the camera capture
-	cv::VideoCapture capture(cameraIndex);
-	if(!capture.isOpened())
+    cv::VideoCapture capture(cameraIndex);
+    if(!capture.isOpened())
     {
         std::printf("Unable to open video source, terminating program! \n");
         return 0;
     }
-	
-	// get the video source paramters
-	int captureWidth = static_cast<int>(capture.get(CV_CAP_PROP_FRAME_WIDTH));
-	int captureHeight = static_cast<int>(capture.get(CV_CAP_PROP_FRAME_HEIGHT));
-	std::printf("Video source opened successfully (width=%d height=%d)! \n", captureWidth, captureHeight);
+
+    // get the video source paramters
+    int captureWidth = static_cast<int>(capture.get(CV_CAP_PROP_FRAME_WIDTH));
+    int captureHeight = static_cast<int>(capture.get(CV_CAP_PROP_FRAME_HEIGHT));
+    std::printf("Video source opened successfully (width=%d height=%d)! \n", captureWidth, captureHeight);
 
     // create the debug image windows
     if(showFrames)
     {
-		cv::namedWindow(DISPLAY_WINDOW_NAME, CV_WINDOW_AUTOSIZE);
+        cv::namedWindow(DISPLAY_WINDOW_NAME, CV_WINDOW_AUTOSIZE);
     }
 
     // process data until program termination
-	bool doCapture = true;
-	int frameCount = 0;
+    bool doCapture = true;
+    int frameCount = 0;
     while(doCapture)
     {
         // get the start time
-		double startTicks = static_cast<double>(cv::getTickCount());
+        double startTicks = static_cast<double>(cv::getTickCount());
 
         // attempt to acquire an image frame
-		cv::Mat captureFrame;
+        cv::Mat captureFrame;
         if(capture.read(captureFrame))
         {
             // process the image frame
@@ -114,22 +114,22 @@ int main(int argc, char **argv)
         // update the GUI window if necessary
         if(showFrames)
         {
-			cv::imshow(DISPLAY_WINDOW_NAME, captureFrame);
-            
-			// check for program termination
-			if(cv::waitKey(1) == 'q')
-			{
-				doCapture = false;
-			}
+            cv::imshow(DISPLAY_WINDOW_NAME, captureFrame);
+
+            // check for program termination
+            if(cv::waitKey(1) == 'q')
+            {
+                doCapture = false;
+            }
         }
 
         // compute the frame processing time
-		double endTicks = static_cast<double>(cv::getTickCount());
-		double elapsedTime = (endTicks - startTicks) / cv::getTickFrequency();
+        double endTicks = static_cast<double>(cv::getTickCount());
+        double elapsedTime = (endTicks - startTicks) / cv::getTickFrequency();
         std::printf("Frame processing time: %f \n", elapsedTime);
     }
 
     // release program resources before returning
-	capture.release();
-	cv::destroyAllWindows();
+    capture.release();
+    cv::destroyAllWindows();
 }
