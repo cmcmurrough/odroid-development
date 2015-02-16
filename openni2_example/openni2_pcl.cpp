@@ -48,9 +48,6 @@ int main(int argc, char** argv)
     pcl::visualization::CloudViewer viewer("Point Cloud");
     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>);
 
-
-
-
     bool isRunning = false;
     OpenNI2Grabber grabber;
 
