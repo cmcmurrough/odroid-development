@@ -23,7 +23,7 @@
 
 // include necessary dependencies
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <opencv/highgui.h>
 
 // configuration parameters
