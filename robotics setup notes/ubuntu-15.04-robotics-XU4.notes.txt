@@ -70,6 +70,12 @@ Repository=~/OpenNI-Linux-Arm-2.2/Redist/OpenNI2/Drivers/
 cp -L lib/OpenNI2-FreenectDriver/libFreenectDriver.so ${Repository}
 sudo cp ~/libfreenect/platform/linux/udev/51-kinect.rules /etc/udev/rules.d
 
+### CREATE TEMPORARY SWAP FILE ###
+dd if=/dev/zero of=~/.swapfile bs=1024 count=1M
+mkswap ~/.swapfile
+swapon ~/.swapfile
+swapon -s
+
 ### INSTALL PCL DEPENDENCIES ###
 sudo apt-get install freeglut3-dev libboost-all-dev libeigen3-dev libflann-dev libvtk5-dev libusb-1.0-0-dev libqhull-dev
 
@@ -84,6 +90,10 @@ cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local .. 
 make
 sudo make install
+
+### DELETE TEMPORARY SWAP FILE ###
+swapoff ~/.swapfile
+sudo rm ~/.swapfile
 
 ### GET ODROID-DEVELOPMENT EXAMPLES ###
 cd ~
