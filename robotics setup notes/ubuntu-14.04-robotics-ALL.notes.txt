@@ -1,0 +1,127 @@
+### LOGIN ###
+username: root
+password: odroid
+
+### SETUP UBUNTU ###
+sudo apt-get update
+sudo apt-get install lxde gedit build-essential checkinstall cmake cmake-curses-gui pkg-config chromium-browser gparted wicd guvcview
+
+### ADD USER ACCOUNT ###
+sudo adduser odroid
+sudo adduser odroid sudo
+sudo adduser odroid netdev
+
+### LOGIN ###
+username: odroid
+password: odroid
+
+### CONFIGURE LXDE ###
+1. Set up welcome screen (sudo gedit /etc/lxdm/default.conf)
+2. Resize partition to 7168 MB with gparted
+3. Check wifi using wicd
+4. Set background to solid color
+5. Remove logout application launch bar (lower right corner)
+6. Set taskbar icons (pcmanfm, lxterminal, chromium, wicd)
+7. Disable screensaver
+8. Open wicd, properties menu, general settings. Enter 'wlan0' under Wireless interface
+9. Open wicd, properties menu, general settings. Enter 'eth3' under ethernet interface (XU4 ONLY!)
+
+### FIX LOGOUT GUI PERMISSION BUG (https://tracker.zentyal.org/issues/360) ###
+1. sudo apt-get install systemd-shim
+2. Edit lxdm session file (/etc/pam.d/lxdm), add the following line
+session required pam_systemd.so
+
+### FIX WAITING FOR NETWORK CONFIGURATION BUG ###
+1. Edit network interfaces file (sudo gedit /etc/network/interfaces), replace with the following
+auto lo
+iface lo inet loopback
+
+### RUN ODROID UTILITY ###
+sudo -s
+wget -O /usr/local/bin/odroid-utility.sh https://raw.githubusercontent.com/mdrjr/odroid-utility/master/odroid-utility.sh
+chmod +x /usr/local/bin/odroid-utility.sh
+odroid-utility.sh
+
+### INSTALL OPENCV DEPENDENCIES ###
+sudo apt-get install build-essential checkinstall cmake pkg-config yasm libtiff4-dev libjpeg-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev libxine-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev python-dev python-numpy libqt4-dev libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev
+
+### GET OPENCV SOURCE ###
+cd ~
+wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.9/opencv-2.4.9.zip
+unzip opencv-2.4.9.zip
+rm opencv-2.4.9.zip
+cd opencv-2.4.9
+
+### BUILD AND INSTALL OPENCV ###
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_OPENGL=ON -DWITH_V4L=ON -DWITH_TBB=ON -DBUILD_TBB=ON -DENABLE_VFPV3=ON -DENABLE_NEON=ON ..
+make
+sudo make install
+
+### INSTALL OPENNI (https://github.com/cmcmurrough/OpenNI2) ###
+cd ~
+sudo apt-get install -y g++ python libusb-1.0-0-dev libudev-dev openjdk-6-jdk freeglut3-dev doxygen graphviz
+git clone https://github.com/cmcmurrough/OpenNI2
+cd OpenNI2
+PLATFORM=Arm make
+cd Packaging && python ReleaseVersion.py Arm
+mv Final/OpenNI-Linux-Arm-2.2.tar.bz2 ~
+cd ~
+tar -xvf OpenNI-Linux-Arm-2.2.tar.bz2
+rm -rf OpenNI2
+rm OpenNI-Linux-Arm-2.2.tar.bz2
+cd OpenNI-Linux-Arm-2.2
+sudo sh install.sh
+
+### BUILD AND INSTALL LIBFREENECT ###
+cd ~
+sudo apt-get install libxmu-dev libxi-dev libusb-dev
+git clone http://github.com/cmcmurrough/libfreenect
+cd libfreenect
+mkdir build
+cd build
+cmake .. -DBUILD_OPENNI2_DRIVER=ON
+make
+Repository=~/OpenNI-Linux-Arm-2.2/Redist/OpenNI2/Drivers/
+cp -L lib/OpenNI2-FreenectDriver/libFreenectDriver.so ${Repository}
+sudo cp ~/libfreenect/platform/linux/udev/51-kinect.rules /etc/udev/rules.d
+
+### INSTALL PCL DEPENDENCIES ###
+sudo apt-get install freeglut3-dev libboost-all-dev libeigen3-dev libflann-dev libvtk5-dev libusb-1.0-0-dev libqhull-dev
+
+### GET PCL SOURCE (RELEASE 1.7.2) ###
+cd ~
+git clone https://github.com/PointCloudLibrary/pcl pcl-1.7.2
+cd pcl-1.7.2
+
+### BUILD AND INSTALL PCL ###
+mkdir build
+cd build
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local .. 
+make
+sudo make install
+
+### INSTALL ROS (http://wiki.ros.org/indigo/Installation/UbuntuARM) ###
+cd ~
+sudo update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
+
+sudo sh -c 'echo "deb http://packages.namniart.com/repos/ros trusty main" > /etc/apt/sources.list.d/ros-latest.list'
+
+wget http://packages.namniart.com/repos/namniart.key -O - | sudo apt-key add -
+
+sudo apt-get update
+sudo apt-get install ros-indigo-ros-base
+
+sudo apt-get install python-rosdep
+sudo rosdep init
+rosdep update
+
+echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
+sudo apt-get install python-rosinstall
+
+### GET ODROID-DEVELOPMENT EXAMPLES ###
+cd ~
+git clone https://github.com/cmcmurrough/odroid-development.git
