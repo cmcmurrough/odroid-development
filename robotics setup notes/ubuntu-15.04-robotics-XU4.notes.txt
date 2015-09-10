@@ -39,9 +39,33 @@ cd opencv-2.4.12.1
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_OPENGL=ON -DWITH_V4L=ON -DWITH_TBB=ON -DBUILD_TBB=ON -DENABLE_VFPV3=ON -DENABLE_NEON=ON ..
-make
+make -j4
 sudo make install
-
+ 
+### GET ODROID-DEVELOPMENT EXAMPLES ###
+cd ~
+git clone https://github.com/cmcmurrough/odroid-development.git
+ 
+### INSTALL AND PATCH OPENCL HEADERS ###
+sudo apt-get install opencl-headers
+sudo rm /usr/include/CL/cl.hpp
+sudo cp odroid-development/misc/cl.hpp /usr/include/CL
+ 
+### BUILD AND INSTALL LIBFREENECT2 ###
+cd ~
+sudo apt-get install build-essential libturbojpeg libjpeg-turbo8-dev libtool autoconf libudev-dev cmake mesa-common-dev freeglut3-dev libxrandr-dev doxygen libxi-dev automake opencl-headers libglfw3-dev
+git clone https://github.com/cmcmurrough/libfreenect2.git
+cd libfreenect2/depends
+sudo sh install_libusb.sh
+cd ../examples/protonect
+mkdir build
+cd build
+cmake -DENABLE_OPENGL=OFF ..
+make -j4
+sudo make install
+sudo cp ~/libfreenect2/rules/90-kinect2.rules /etc/udev/rules.d/
+./../bin/Protonect
+ 
 ### INSTALL OPENNI (https://github.com/cmcmurrough/OpenNI2) ###
 cd ~
 sudo apt-get install -y g++ python libusb-1.0-0-dev libudev-dev openjdk-6-jdk freeglut3-dev doxygen graphviz
@@ -65,7 +89,7 @@ cd libfreenect
 mkdir build
 cd build
 cmake .. -DBUILD_OPENNI2_DRIVER=ON
-make
+make -j4
 Repository=~/OpenNI-Linux-Arm-2.2/Redist/OpenNI2/Drivers/
 cp -L lib/OpenNI2-FreenectDriver/libFreenectDriver.so ${Repository}
 sudo cp ~/libfreenect/platform/linux/udev/51-kinect.rules /etc/udev/rules.d
@@ -73,7 +97,7 @@ sudo cp ~/libfreenect/platform/linux/udev/51-kinect.rules /etc/udev/rules.d
 ### CREATE TEMPORARY SWAP FILE ###
 dd if=/dev/zero of=~/.swapfile bs=1024 count=1M
 mkswap ~/.swapfile
-swapon ~/.swapfile
+sudo swapon ~/.swapfile
 swapon -s
 
 ### INSTALL PCL DEPENDENCIES ###
@@ -94,56 +118,3 @@ sudo make install
 ### DELETE TEMPORARY SWAP FILE ###
 swapoff ~/.swapfile
 sudo rm ~/.swapfile
-
-### GET ODROID-DEVELOPMENT EXAMPLES ###
-cd ~
-git clone https://github.com/cmcmurrough/odroid-development.git
-
-### INSTALL AND PATCH OPENCL HEADERS ###
-sudo apt-get install opencl-headers
-sudo rm /usr/include/CL/cl.hpp
-sudo cp odroid-development/misc/cl.hpp /usr/include/CL
-
-### BUILD AND INSTALL LIBFREENECT2 ###
-cd ~
-sudo apt-get install build-essential libturbojpeg libjpeg-turbo8-dev libtool autoconf libudev-dev cmake mesa-common-dev freeglut3-dev libxrandr-dev doxygen libxi-dev automake opencl-headers libglfw3-dev
-git clone https://github.com/cmcmurrough/libfreenect2.git
-cd libfreenect2/depends
-sudo sh install_libusb.sh
-cd ../examples/protonect
-mkdir build
-cd build
-cmake -DENABLE_OPENGL=OFF ..
-make
-sudo make install
-sudo cp ~/libfreenect2/rules/90-kinect2.rules /etc/udev/rules.d/
-./../bin/Protonect
-
-### BUILD AND INSTALL LIBFREENECT2 ###
-cd ~
-git clone https://github.com/cmcmurrough/libfreenect2.git
-cd libfreenect2/depends
-sudo sh install_odroid.sh
-cd ../examples/protonect
-mkdir build
-cd build
-cmake -DENABLE_OPENGL=OFF ..
-make -j4
-sudo make install
-sudo cp ~/libfreenect2/rules/90-kinect2.rules /etc/udev/rules.d/
-./../bin/Protonect
-
-### BUILD AND INSTALL LIBFREENECT2 ###
-cd ~
-sudo apt-get install build-essential libturbojpeg libjpeg-turbo8-dev libtool autoconf libudev-dev cmake mesa-common-dev freeglut3-dev libxrandr-dev doxygen libxi-dev automake opencl-headers libglfw3-dev
-git clone https://github.com/cmcmurrough/libfreenect2.git
-cd libfreenect2/depends
-sudo sh install_libusb.sh
-cd ../examples/protonect
-mkdir build
-cd build
-cmake -DENABLE_OPENGL=OFF ..
-make
-sudo make install
-sudo cp ~/libfreenect2/rules/90-kinect2.rules /etc/udev/rules.d/
-./../bin/Protonect
