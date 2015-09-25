@@ -118,3 +118,29 @@ sudo make install
 ### DELETE TEMPORARY SWAP FILE ###
 swapoff ~/.swapfile
 sudo rm ~/.swapfile
+
+### BUILD AND INSTALL ROS BAREBONES (http://wiki.ros.org/jade/Installation/Source)###
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 0xB01FA116
+sudo apt-get update
+
+sudo apt-get install python-rosdep python-rosinstall-generator python-wstool python-rosinstall build-essential
+sudo rosdep init
+rosdep update
+
+mkdir ~/ros_catkin_ws
+cd ~/ros_catkin_ws
+rosinstall_generator ros_comm --rosdistro jade --deps --wet-only --tar > jade-ros_comm-wet.rosinstall
+wstool init -j8 src jade-ros_comm-wet.rosinstall
+
+sudo rosdep init
+rosdep update
+sudo rosdep install --from-paths src --ignore-src --rosdistro jade -y
+./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release -j4
+sudo rm -R ~/.ros/
+echo "source ~/ros_catkin_ws/install_isolated/setup.bash" >> ~/.bashrc
+echo "export LC_ALL=C" >> ~/.bashrc
+source ~/.bashrc
+
+### INSTALL ARDUINO IDE ###
+sudo apt-get update && sudo apt-get install arduino arduino-core
