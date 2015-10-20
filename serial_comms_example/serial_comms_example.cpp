@@ -15,17 +15,11 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-/***********************************************************************************************************************
-FILENAME:   serial_comms.cpp
-AUTHORS:    Christopher D. McMurrough
-
-DESCRIPTION:
-Provides an example of communcating with a USB-serial enabled microcontroller
-
-REVISION HISTORY:
-01.19.2014  CDM     original file creation
-01.20.2014  CDM     published under GPL
-***********************************************************************************************************************/
+/*******************************************************************************************************************//**
+ * @file serial_comms_example.cpp
+ * @brief Provides an example of communcating with a USB-serial enabled microcontroller
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 
 #include <iostream>
 
@@ -39,10 +33,12 @@ REVISION HISTORY:
 #define SERIAL_PACKET_START_CHAR 0xAA
 #define SERIAL_PACKET_LENGTH 0x06
 
-/***********************************************************************************************************************
-int openSerialPort(char* portName)
-attempt to open a serial port with the given name, returning -1 on failure
-***********************************************************************************************************************/
+/*******************************************************************************************************************//**
+ * @brief attempt to open a serial port with the given name
+ * @param[in] portName the name of the port to connect to (dev/tty/USB0, COM1, etc)
+ * @return file descriptor of the serial port, or -1 on failure
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 int openSerialPort(char* portName)
 {
     // store the file descriptor for the serial port
@@ -88,29 +84,37 @@ int openSerialPort(char* portName)
     }
 }
 
-/***********************************************************************************************************************
-void closeSerialPort(int serialPort)
-close the given serial port
-***********************************************************************************************************************/
+/*******************************************************************************************************************//**
+ * @brief close the given serial port
+ * @param[in] serialPort file descriptor of the serial port
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 void closeSerialPort(int serialPort)
 {
     tcflush(serialPort, TCIOFLUSH);
     close(serialPort);
 }
 
-/***********************************************************************************************************************
-void writeSerialBytes(int serialPort, unsigned char* data, int numBytes)
-write the byte data to the serial port
-***********************************************************************************************************************/
+/*******************************************************************************************************************//**
+ * @brief write a byte buffer to the serial port
+ * @param[in] serialPort file descriptor of the serial port
+ * @param[in] data byte buffer to write to the port
+ * @param[in] numBytes number of bytes to write
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 void writeSerialBytes(int serialPort, unsigned char* data, int numBytes)
 {
     int result = write(serialPort, data, numBytes);
 }
 
-/***********************************************************************************************************************
-void makeTeensyPacket(unsigned char* buffer, unsigned char val_1, unsigned char val_2, unsigned char val_3)
-create a serial packet containing the data and framing bytes
-***********************************************************************************************************************/
+/*******************************************************************************************************************//**
+ * @brief create a serial packet containing the data and framing bytes
+ * @param[out] buffer output packet buffer after assembly
+ * @param[in] b1 input byte 1
+ * @param[in] b2 input byte 2
+ * @param[in] b3 input byte 3
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 void makeTeensyPacket(unsigned char* buffer, unsigned char b1, unsigned char b2, unsigned char b3)
 {
     // initialize the packet
@@ -128,10 +132,14 @@ void makeTeensyPacket(unsigned char* buffer, unsigned char b1, unsigned char b2,
     }
 }
 
-/***********************************************************************************************************************
-void sendPacket(int serialPort, unsigned char b1, unsigned char b2, unsigned char b3)
-create a packet from the given parameters and send to the serial port
-***********************************************************************************************************************/
+/*******************************************************************************************************************//**
+ * @brief assemble a packet buffer of bytes and write them to the serial port
+ * @param[in] serialPort file descriptor of the serial port
+ * @param[in] b1 input byte 1
+ * @param[in] b2 input byte 2
+ * @param[in] b3 input byte 3
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 void sendPacket(int serialPort, unsigned char b1, unsigned char b2, unsigned char b3)
 {
     // create the outgoing packet buffer
@@ -152,10 +160,12 @@ void sendPacket(int serialPort, unsigned char b1, unsigned char b2, unsigned cha
     writeSerialBytes(serialPort, packet, SERIAL_PACKET_LENGTH);
 }
 
-/***********************************************************************************************************************
-int pollSerialPort(int serialPort)
-processed received data from the serial port, returning the number of bytes
-***********************************************************************************************************************/
+/*******************************************************************************************************************//**
+ * @brief processed received data from the serial port, returning the number of bytes
+ * @param[in] serialPort file descriptor of the serial port
+ * @return the number of bytes read from the port
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 int pollSerialPort(int serialPort)
 {
     const int bufferSize = 100;
@@ -182,9 +192,12 @@ int pollSerialPort(int serialPort)
 }
 
 /***********************************************************************************************************************
-int main(int argc, char **argv)
-program entry point, expects the serial port name as a command line argument
-***********************************************************************************************************************/
+ * @brief program entry point
+ * @param[in] argc number of command line arguments
+ * @param[in] argv string array of command line arguments
+ * @return return code (0 for normal termination)
+ * @author Christopher D. McMurrough
+ **********************************************************************************************************************/
 int main(int argc, char **argv)
 {
     // store the port parameters

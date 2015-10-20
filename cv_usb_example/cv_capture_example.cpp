@@ -16,9 +16,9 @@
 //
 
 /*******************************************************************************************************************//**
- * @FILE cv_capture_example.cpp
- * @BRIEF C++ example for acquiring and processing image frames with OpenCV
- * @AUTHOR Christopher D. McMurrough
+ * @file cv_capture_example.cpp
+ * @brief C++ example for acquiring and processing image frames with OpenCV
+ * @author Christopher D. McMurrough
  **********************************************************************************************************************/
 
 // include necessary dependencies
@@ -31,10 +31,10 @@
 #define DISPLAY_WINDOW_NAME "Camera Image"
 
 /*******************************************************************************************************************//**
- * @BRIEF Process a single image frame
- * @PARAM[in] imageIn the input image frame
- * @RETURN true if frame was processed successfully
- * @AUTHOR Christopher D. McMurrough
+ * @brief Process a single image frame
+ * @param[in] imageIn the input image frame
+ * @return true if frame was processed successfully
+ * @author Christopher D. McMurrough
  **********************************************************************************************************************/
 bool processFrame(const cv::Mat &imageIn)
 {
@@ -43,11 +43,11 @@ bool processFrame(const cv::Mat &imageIn)
 }
 
 /***********************************************************************************************************************
- * @BRIEF program entry point
- * @PARAM[in] argc number of command line arguments
- * @PARAM[in] argv string array of command line arguments
- * @RETURN return code (0 for normal termination)
- * @AUTHOR Christoper D. McMurrough
+ * @brief program entry point
+ * @param[in] argc number of command line arguments
+ * @param[in] argv string array of command line arguments
+ * @return return code (0 for normal termination)
+ * @author Christopher D. McMurrough
  **********************************************************************************************************************/
 int main(int argc, char **argv)
 {

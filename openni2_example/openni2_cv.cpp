@@ -32,7 +32,7 @@ using namespace cv;
 * @param[in] argc number of command line arguments
 * @param[in] argv string array of command line arguments
 * @return return code (0 for normal termination)
-* @author Christoper D. McMurrough
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 int main(int argc, char** argv)
 {
