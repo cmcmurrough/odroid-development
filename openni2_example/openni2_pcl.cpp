@@ -30,8 +30,6 @@
 
 #include "OpenNI2Grabber.h"
 
-using namespace cv;
-
 /*******************************************************************************************************************//**
 * @brief program entry point
 * @param[in] argc number of command line arguments
@@ -64,10 +62,10 @@ int main(int argc, char** argv)
 
     // acquire frames until program termination
     std::cout << "Press 'q' to halt acquisition..." << std::endl;
-    Mat depthImage, colorImage;
-    Mat depthImageDraw;
-    Mat disparityImage;
-    Mat depthImageMeters;
+    cv::Mat depthImage, colorImage;
+    cv::Mat depthImageDraw;
+    cv::Mat disparityImage;
+    cv::Mat depthImageMeters;
     while(isRunning)
     {
         // acquire an image frame
