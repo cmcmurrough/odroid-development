@@ -15,16 +15,10 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-/***********************************************************************************************************************
-FILENAME:   openni2_pcl.cpp
-AUTHORS:    Christopher D. McMurrough
-
-DESCRIPTION:
-Provides an example of using OpenNI2Grabber to assemble point clouds from depth and rgb images
-
-REVISION HISTORY:
-08.12.2013  CDM     original file creation
-09.01.2013  CDM     published under GPL
+/*******************************************************************************************************************//**
+* @file openni2_pcl.cpp
+* @brief Code example for using OpenNI2Grabber to assemble point clouds from depth and rgb images
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 
 #include <opencv2/core/core.hpp>
@@ -38,9 +32,12 @@ REVISION HISTORY:
 
 using namespace cv;
 
-/***********************************************************************************************************************
-int main(int argc, char **argv)
-program entry point
+/*******************************************************************************************************************//**
+* @brief program entry point
+* @param[in] argc number of command line arguments
+* @param[in] argv string array of command line arguments
+* @return return code (0 for normal termination)
+* @author Christoper D. McMurrough
 ***********************************************************************************************************************/
 int main(int argc, char** argv)
 {

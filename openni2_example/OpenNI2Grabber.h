@@ -15,24 +15,16 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-/***********************************************************************************************************************
-FILENAME:   OpenNI2Grabber.h
-AUTHORS:    Christopher D. McMurrough
-
-DESCRIPTION:
-This file provides convenient access to an OpenNI2 device for OpenCV and PCL
-
-REVISION HISTORY:
-08.12.2013  CDM     original file creation
-09.01.2013  CDM     published under GPL
+/*******************************************************************************************************************//**
+* @file OpenNI2Grabber.h
+* @brief This file provides convenient access to an OpenNI2 device for OpenCV and PCL
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 
 #include <OpenNI.h>
 #include <opencv2/opencv.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-
-//using namespace pcl;
 
 #define RESOLUTION_X_DEPTH 640
 #define RESOLUTION_Y_DEPTH 480
@@ -47,9 +39,9 @@ REVISION HISTORY:
 #define DEPTH_FX 525.0
 #define DEPTH_FY 525.0
 
-/***********************************************************************************************************************
-class OpenNI2Grabber
-This class contains conventient wrapper functions for accessing an OpenNI2 device
+/*******************************************************************************************************************//**
+* @brief This class contains conventient wrapper functions for accessing an OpenNI2 device
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 class OpenNI2Grabber
 {
@@ -114,9 +106,14 @@ public:
     void makeCloud(cv::Mat& depthImage, cv::Mat& colorImage, pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloudOut);
 };
 
-/***********************************************************************************************************************
-bool initialize(bool getDepth = true, bool getColor = true, bool setRegistration = true, bool setDepthColorSync = true)
-initialize the grabber for depth and/or color acquisition
+/*******************************************************************************************************************//**
+* @brief initialize the grabber for depth and/or color acquisition
+* @param[in] getDepth if true, depth data will be acquired (default:true)
+* @param[in] getColor if true, color data will be acquired (default:true)
+* @param[in] setRegistration if true, image image registration will be enabled (default:true)
+* @param[in] setDepthColorSync if true, depth and color data synchronization will be enabled (default:true)
+* @returns true if the grabber was initialized successfully
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::initialize(bool getDepth = true, bool getColor = true, bool setRegistration = true, bool setDepthColorSync = true)
 {
@@ -240,10 +237,10 @@ bool OpenNI2Grabber::initialize(bool getDepth = true, bool getColor = true, bool
 
         return true;
     }
-    catch(char* error)
+    catch(std::exception &e)
     {
         // we encountered an error, return false
-        std::cout << "Exception occured while opening stream: " << error << std::endl;
+        std::cout << "Exception occurred while opening stream: " << e.what() << std::endl;
         myImageRegistrationEnabled = false;
         myGetDepth = false;
         myGetColor = false;
@@ -259,63 +256,71 @@ bool OpenNI2Grabber::initialize(bool getDepth = true, bool getColor = true, bool
     }
 }
 
-/***********************************************************************************************************************
-bool isInitialized()
-return the initialization state of the grabber
+/*******************************************************************************************************************//**
+* @brief return the initialization state of the grabber
+* @returns true if the grabber was initialized successfully
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::isInitialized()
 {
     return myIsInitialized;
 }
 
-/***********************************************************************************************************************
-bool isRunning()
-return the execution state of the grabber
+/*******************************************************************************************************************//**
+* @brief return the execution state of the grabber
+* @returns true if the grabber is currently running
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::isRunning()
 {
     return myIsRunning;
 }
 
-/***********************************************************************************************************************
-bool isImageRegistrationEnabled()
-return true if registration is enabled on the device
+/*******************************************************************************************************************//**
+* @brief return the registration setting of the grabber
+* @returns true if registration is enabled on the grabber
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::isImageRegistrationEnabled()
 {
     return myImageRegistrationEnabled;
 }
 
-/***********************************************************************************************************************
-bool isDepthStreamEnabled()
-return true if depth acquisition is enabled
+/*******************************************************************************************************************//**
+* @brief return the depth acquisition setting of the grabber
+* @returns true if depth acquisition is enabled
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::isDepthStreamEnabled()
 {
     return myGetDepth;
 }
 
-/***********************************************************************************************************************
-bool isColorStreamEnabled()
-return true if color acquisition is enabled
+/*******************************************************************************************************************//**
+* @brief return the color acquisition setting of the grabber
+* @returns true if color acquisition is enabled
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::isColorStreamEnabled()
 {
     return myGetColor;
 }
 
-/***********************************************************************************************************************
-bool IsDepthColorSyncEnabled()
-return true if depth and color streams are synchronized
+/*******************************************************************************************************************//**
+* @brief return the depth and color synchronization setting of the grabber
+* @returns true if depth and color streams are synchronized
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::IsDepthColorSyncEnabled()
 {
     return myIsDepthColorSyncEnabled;
 }
 
-/***********************************************************************************************************************
-bool waitForFrame(int wait_ms)
-waits up to the given duration in milliseconds for a frame update, returning true if an update was successful
+/*******************************************************************************************************************//**
+* @brief wait up to the given duration in milliseconds for a frame update
+* @param[in] wait_ms maximum number of milliseconds to wait for a frame
+* @returns true if an update was successful
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::waitForFrame(int wait_ms)
 {
@@ -347,9 +352,11 @@ bool OpenNI2Grabber::waitForFrame(int wait_ms)
     }
 }
 
-/***********************************************************************************************************************
-bool getDepthFrame(cv::Mat& depthImage)
-reads a depth frame from the stream
+/*******************************************************************************************************************//**
+* @brief reads a depth frame from the stream
+* @param[out] depthImage depth image frame
+* @returns true if the frame is valid
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::getDepthFrame(cv::Mat& depthImage)
 {
@@ -371,9 +378,11 @@ bool OpenNI2Grabber::getDepthFrame(cv::Mat& depthImage)
     }
 }
 
-/***********************************************************************************************************************
-bool getColorFrame(cv::Mat& colorImage)
-reads a color frame from the stream, returning true if the conversion was successful
+/*******************************************************************************************************************//**
+* @brief reads a color frame from the stream
+* @param[out] colorImage color image frame
+* @returns true if the frame is valid
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::getColorFrame(cv::Mat& colorImage)
 {
@@ -396,9 +405,10 @@ bool OpenNI2Grabber::getColorFrame(cv::Mat& colorImage)
     }
 }
 
-/***********************************************************************************************************************
-bool start()
-start data acquisition
+/*******************************************************************************************************************//**
+* @brief start data acquisition
+* @returns true if the grabber was started successfully
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 bool OpenNI2Grabber::start()
 {
@@ -435,9 +445,10 @@ bool OpenNI2Grabber::start()
     }
 }
 
-/***********************************************************************************************************************
-void stop()
-halt data acquisition
+/*******************************************************************************************************************//**
+* @brief stop data acquisition
+* @returns true if the grabber was stopped successfully
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 void OpenNI2Grabber::stop()
 {
@@ -454,9 +465,12 @@ void OpenNI2Grabber::stop()
     }
 }
 
-/***********************************************************************************************************************
-void depthToMeters(cv::Mat& depthMM, cv::Mat& depthM)
-convert the integer depth image in mm to a float image in meters
+/*******************************************************************************************************************//**
+* @brief convert the integer depth image in mm to a float image in meters
+* @param[in] depthMM input depth integer data frame in millimetres
+* @param[out] depthM input depth float data frame in meters
+* @returns true if the grabber is currently running
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 void OpenNI2Grabber::depthToMeters(cv::Mat& depthMM, cv::Mat& depthM)
 {
@@ -464,9 +478,13 @@ void OpenNI2Grabber::depthToMeters(cv::Mat& depthMM, cv::Mat& depthM)
     depthMM.convertTo(depthM, CV_32FC1, 0.001f, 0);
 }
 
-/***********************************************************************************************************************
-void makeCloud(cv::Mat& depthImage, cv::Mat& colorImage, pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud)
-create a point cloud structure from a given depth and color image
+/*******************************************************************************************************************//**
+* @brief create a point cloud structure from a given depth and color image
+* @param[in] depthImage depth image frame
+* @param[in] colorImage color image frame
+* @param[out] cloudOut output point cloud structure
+* @returns true if the grabber is currently running
+* @author Christopher D. McMurrough
 ***********************************************************************************************************************/
 void OpenNI2Grabber::makeCloud(cv::Mat& depthImage, cv::Mat& colorImage, pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloudOut)
 {
