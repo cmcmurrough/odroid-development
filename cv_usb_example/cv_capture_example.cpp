@@ -118,7 +118,7 @@ int main(int argc, char **argv)
             cv::imshow(DISPLAY_WINDOW_NAME, captureFrame);
 
             // check for program termination
-            if(cv::waitKey(1) == 'q')
+            if(((char) cv::waitKey(1)) == 'q')
             {
                 doCapture = false;
             }
